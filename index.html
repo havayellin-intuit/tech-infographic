@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trust and Safety City Map Infographic</title>
+    <title>Trust and Safety City Map</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -174,12 +174,12 @@
                 let content = '';
                 if (key.startsWith('*Note*')) {
                     content = `<li class="note">📝 ${data[key]}</li>`;
+                } else if (key.startsWith('Details')) {
+                    content = `<ul class="list-none pl-4"><li class="text-xs text-gray-500">${data[key]}</li></ul>`;
                 } else {
                     content = `<li>${key}`;
                     if (typeof data[key] === 'object' && data[key] !== null && Object.keys(data[key]).length > 0) {
                         content += createNestedList(data[key]);
-                    } else if (typeof data[key] === 'string') {
-                         content += `<ul class="list-none pl-4"><li class="text-xs text-gray-500">${data[key]}</li></ul>`;
                     }
                     content += '</li>';
                 }
