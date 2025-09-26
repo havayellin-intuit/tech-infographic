@@ -201,6 +201,7 @@
                 return 1;
             }
             for (const key in obj) {
+                if (key === "*Note*" || key === "Details") continue;
                 count += countCapabilities(obj[key]);
             }
             return count;
@@ -244,6 +245,7 @@
 
             const pieLabels = Object.keys(allPrimaryDomains);
             const pieData = pieLabels.map(domain => countCapabilities(allPrimaryDomains[domain]));
+            const totalCapabilities = pieData.reduce((sum, count) => sum + count, 0);
 
             for (const pillar in frameworkData) {
                 const targetCol = pillar === 'Solutions' ? solutionsCol : foundationsCol;
@@ -350,6 +352,13 @@
                                     let label = item.chart.data.labels[item.dataIndex];
                                     if (Array.isArray(label)) return label.join(' ');
                                     return label;
+                                },
+                                label: (context) => {
+                                    const label = context.label || '';
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((sum, current) => sum + current, 0);
+                                    const percentage = ((value / total) * 100).toFixed(2) + '%';
+                                    return `${label}: ${value} (${percentage})`;
                                 }
                             }
                         }
