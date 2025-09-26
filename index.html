@@ -10,11 +10,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Energetic & Playful -->
-    <!-- Application Structure Plan: The infographic follows a top-down narrative structure. It starts with high-impact summary statistics ("big numbers") to provide an immediate sense of scale. This is followed by a central doughnut chart that visualizes the proportional distribution of sub-capabilities, offering a quick comparison of complexity between the main areas. The main body consists of a responsive grid of cards, each detailing a primary capability. This structure was chosen to guide the user from a broad overview to specific details in a logical, scrollable flow, making the dense hierarchical information easy to digest and explore. -->
+    <!-- Application Structure Plan: The infographic is designed with a top-down narrative flow. It starts with high-impact summary statistics ("big numbers") to give an immediate sense of the framework's scale. This is followed by a central doughnut chart that visualizes the distribution of capabilities across the main domains. The body of the page uses a responsive grid of cards, each dedicated to a primary domain, allowing users to explore the details. This structure guides the user from a broad overview to specific details, making the complex hierarchy easy to understand. -->
     <!-- Visualization & Content Choices: 
-        - Key Metrics (Total Categories & Capabilities): Goal: Inform. Method: Large, bold text. Justification: These stats act as a hook, immediately conveying the scope of the framework without complex visuals. NO SVG.
-        - Capability Distribution: Goal: Compare Composition. Viz: Doughnut Chart (Chart.js/Canvas). Justification: Effectively illustrates the parts of a whole, showing which top-level domains are the most built-out. It serves as a visual anchor for the page. The tooltip and label wrapping configurations are included for clarity. NO SVG.
-        - Hierarchical Breakdown: Goal: Organize. Method: Styled HTML cards with nested lists (Tailwind). Justification: For hierarchical, qualitative data, a clean, structured text format is clearer than a complex chart. Cards provide a modular and scannable way to present details for each category. Unicode characters denote notes. NO SVG/Mermaid. -->
+        - Key Metrics (Domains, Areas, etc.): Goal: Inform. Method: Large, bold text. Justification: These "big number" callouts act as an effective hook, quickly conveying the scope and scale of the data. NO SVG is used.
+        - Domain Distribution: Goal: Compare Composition. Viz: Doughnut Chart (Chart.js/Canvas). Justification: This is ideal for showing parts of a whole, clearly illustrating the relative size of each primary domain. It serves as a visual centerpiece. Tooltip and label wrapping are included for clarity. NO SVG is used.
+        - Hierarchical Breakdown: Goal: Organize. Method: Styled HTML cards with nested lists (Tailwind). Justification: For this type of nested textual data, a clean card layout with lists is far more readable and scannable than a complex diagram, especially on various screen sizes. Unicode characters are used for notes. NO SVG/Mermaid is used. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -59,31 +59,31 @@
 
         <header class="text-center mb-16">
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
-                <span class="gradient-text">Business Capabilities Landscape</span>
+                <span class="gradient-text">Business Capabilities Framework</span>
             </h1>
-            <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">An overview of the core frameworks driving our technology and operations, from decisioning intelligence to trust and safety.</p>
+            <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">A visual exploration of the core capabilities driving customer security, product integrity, and compliance.</p>
         </header>
 
         <section class="mb-20">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <p class="text-5xl font-bold text-[#7a5195]">8</p>
+                    <p class="text-5xl font-bold text-[#7a5195]">12</p>
                     <p class="text-lg font-medium text-gray-700 mt-2">Primary Domains</p>
                 </div>
                 <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <p class="text-5xl font-bold text-[#ef5675]">22</p>
-                    <p class="text-lg font-medium text-gray-700 mt-2">Functional Areas</p>
+                    <p class="text-5xl font-bold text-[#ef5675]">48</p>
+                    <p class="text-lg font-medium text-gray-700 mt-2">Key Functional Areas</p>
                 </div>
                 <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <p class="text-5xl font-bold text-[#ffa600]">35+</p>
+                    <p class="text-5xl font-bold text-[#ffa600]">50+</p>
                     <p class="text-lg font-medium text-gray-700 mt-2">Total Capabilities</p>
                 </div>
             </div>
         </section>
 
         <section class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-20">
-            <h2 class="text-2xl md:text-3xl font-bold text-center mb-2">Capability Distribution by Domain</h2>
-            <p class="text-center text-gray-600 mb-8">This chart shows the proportion of functional areas within each primary domain, highlighting the key areas of focus.</p>
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-2">Distribution of Capabilities by Domain</h2>
+            <p class="text-center text-gray-600 mb-8">This chart illustrates the proportion of key functional areas within each primary domain.</p>
             <div class="chart-container">
                 <canvas id="capabilitiesChart"></canvas>
             </div>
@@ -98,108 +98,139 @@
     </div>
 
     <script>
-       const data = {
+        const infographicData = {
+            "Customer Account Security": {
+                "Sign-up protection": { "notes": "IRIS and IRIS decomposition in future" },
+                "Sign-in protection": {},
+                "Customer Interaction Security": {},
+                "High Risk Interactions": {},
+                "Customer Security Portal": {},
+                "Customer account security intelligence": {}
+            },
+            "Product Abuse": {
+                "Abuse Signal Gathering": {},
+                "Product Abuse Mitigation By Design": {},
+                "Third Party Developer Ecosystem Abuse": {},
+                "Campaign Safety": {
+                    "Campaign Content Safety": {},
+                    "Campaign Abuse and Risk Prevention": {},
+                    "Legacy MC": {}
+                },
+                "Customer correspondes content safety": {},
+                "AI Interaction Content Safety": {
+                    "Customer to AI": {},
+                    "AI to AI": {}
+                },
+                "Ecosystem abuse prevention": { "notes": "sms pumping, Add FI, wallet" },
+                "Product abuse intelligence": {}
+            },
+            "Customer verification": {
+                "Negative Entity Continuous Screening": {},
+                "Regulatory Screening": {
+                    "OFAC Screening": {},
+                    "PEP Screening": {},
+                    "FinCEN screening": {},
+                    "Regulatory screening intelligence": {}
+                }
+            },
+            "Tax Fraud": {
+                "Tax Filing Fraud": {},
+                "Trusted Auth": {},
+                "Tax Fraud intelligence": {}
+            },
             "Core Decisioning and Integrations": {
-                "Workflow and Policy Management": [
-                    { "h3": "Workflow and Policy Editor", "h4": "📝 The UI which is used for workflow definition and policy writing" },
-                    { "h3": "Feature Catalog", "h4": "📝 Capability to view and select available data and policy features as a part of policy creation/editing" },
-                    { "h3": "Workflow and Policy Lifecycle Management", "h4": "Workflow and Policy Version Control" },
-                    { "h3": null, "h4": "Workflow and Policy Release Management" }
-                ],
-                "Decisioning Runtime": [
-                    { "h3": "Workflow Orchestration", "h4": "(Maestro and Temporal)" },
-                    { "h3": "Workflow Optimization", "h4": "(Translation of Logical workflow DAG to optimized Runtime DAG)" },
-                    { "h3": "Policy Execution", "h4": "(Rule Engine)" }
-                ],
-                "Decision Acceleration Tools": [
-                    { "h3": "RuleX, Policy Drift etc." }
-                ],
-                "Policy Experimentation": [
-                    { "h3": "Offline Policy Experimentation", "h4": "📝 Also known as simulation with historic data" },
-                    { "h3": "Online Policy Experimentation", "h4": "📝 Control group framework" }
-                ],
-                "Vendor Integration Management": [
-                    { "h3": "Data enrichment, caching" }
-                ]
+                "Workflow and Policy Management": {
+                    "Workflow and Policy Editor": { "notes": "📝 The UI which is used for workflow definition and policy writing" },
+                    "Feature Catalog": { "notes": "📝 Capability to view and select available data and policy features as a part of policy creation/editing" },
+                    "Workflow and Policy Lifecycle Management": { "notes": "Workflow and Policy Version Control" },
+                    "Workflow and Policy Release Management": {}
+                },
+                "Decisioning Runtime": {
+                    "Workflow Orchestration": { "notes": "(Maestro and Temporal)" },
+                    "Workflow Optimization": { "notes": "(Translation of Logical workflow DAG to optimized Runtime DAG)" },
+                    "Policy Execution": { "notes": "(Rule Engine)" }
+                },
+                "Decision Acceleration Tools": {
+                    "RuleX, Policy Drift etc.": {}
+                },
+                "Policy Experimentation": {
+                    "Offline Policy Experimentation": { "notes": "📝 Also known as simulation with historic data" },
+                    "Online Policy Experimentation": { "notes": "📝 Control group framework" }
+                },
+                "Vendor Integration Management": {
+                    "Data enrichment, caching": {}
+                }
             },
             "Device Intelligence": {
-                "Device Behavioral Biometrics": [],
-                "Device Fingerprint": [],
-                "Bot Detection": []
+                "Device Behavioral Biometrics": {},
+                "Device Fingerprint": {},
+                "Bot Detection": {}
             },
             "Operation and Investigation Management": {
-                "Risk Operational and Investigation Tools": [],
-                "Content Moderation Operational and Investigation Tools": [],
-                "Customer Due Diligence": []
+                "Risk Operational and Investigation Tools": {},
+                "Content Moderation Operational and Investigation Tools": {},
+                "Customer Due Diligence": {},
+                "Operational intelligence": {}
             },
             "Document Verification and Validation": {
-                "Bank Document Verification & Validation": [],
-                "Business License Verification & Validation": [],
-                "GovID Verification & Validation": [],
-                "Utility Bill Verification & Validation": []
+                "Bank Document Verification & Validation": {},
+                "Business License Verification & Validation": {},
+                "GovID Verification & Validation": {},
+                "Utility Bill Verification & Validation": {}
             },
             "Trust Intelligence": {
-                "List Management": [ { "h3": "(Neli)" } ],
-                "Link Analysis": [ { "h3": "(Graph)" } ],
-                "Trust Level Management": [
-                    { "h3": "CSTL" },
-                    { "h3": "HERMES" }
-                ],
-                "Restriction & Immunity Management": []
+                "List Management": { "notes": "(Neli)" },
+                "Link Analysis": { "notes": "(Graph)" },
+                "Trust Level Management": {
+                    "CSTL": {},
+                    "HERMES": {}
+                },
+                "Restriction & Immunity Management": {}
             },
             "Content Intelligence": {
-                "User Generated Content Moderation": [
-                    { "h4": "📝 OICS as a shared capability for all other MOs and business domains/capabilities" }
-                ],
-                "Machine Generated Content Moderation": []
+                "User Generated Content Moderation": { "notes": "📝 OICS as a shared capability for all other MOs and business domains/capabilities" },
+                "Machine Generated Content Moderation": {},
+                "Content detectors": {}
             },
             "Trust & Safety Data and Analytics": {
-                "User Journey Risk Analysis": [ { "h3": "(Chronos)" } ],
-                "Fraud Warehouse": [ { "h3": "(F360)" } ]
+                "User Journey Risk Analysis": { "notes": "(Chronos)" },
+                "Fraud Warehouse": { "notes": "(F360)" },
+                "IRS leads reporting": {}
             },
             "Continuous Entity Screening": {
-                "General": [
-                    { "h4": "📝 Shared capability to support NECS and decentralized continuous screening" }
-                ]
+                "notes": "📝 Shared capability to support NECS and decentralized continuous screening"
             }
         };
 
+        function createNestedList(data) {
+            let html = '<ul class="list-disc list-inside text-gray-600 mt-1 pl-2 space-y-1">';
+            for (const key in data) {
+                if(key === "notes") {
+                    html += `<li class="list-none text-xs bg-blue-50 border border-blue-200 text-blue-800 rounded p-2 mt-1">${data[key].replace(/📝\s*/, '')}</li>`;
+                } else if (typeof data[key] === 'object' && data[key] !== null) {
+                    html += `<li>${key}`;
+                    if(Object.keys(data[key]).length > 0) {
+                        html += createNestedList(data[key]);
+                    }
+                    html += '</li>';
+                }
+            }
+            html += '</ul>';
+            return html;
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const grid = document.getElementById('capabilities-grid');
-            const chartLabels = Object.keys(data);
-            const chartData = chartLabels.map(h1 => Object.keys(data[h1]).length);
-            const chartColors = ['#003f5c', '#7a5195', '#ef5675', '#ff764a', '#ffa600', '#374c80', '#bc5090', '#009a9c', '#665191'];
+            const chartLabels = Object.keys(infographicData);
+            const chartData = chartLabels.map(key => Object.keys(infographicData[key]).length);
+            const chartColors = ['#003f5c', '#7a5195', '#ef5675', '#ff764a', '#ffa600', '#374c80', '#bc5090', '#009a9c', '#665191', '#4099ff', '#ffc107', '#00bcd4'];
             
             let colorIndex = 0;
-            for (const h1 in data) {
+            for (const h1 in infographicData) {
                 let cardHtml = `<div class="card p-6">
                                 <h3 class="text-xl font-bold mb-4" style="color: ${chartColors[colorIndex % chartColors.length]};">${h1}</h3>
-                                <div class="card-content space-y-4">`;
-                
-                for (const h2 in data[h1]) {
-                     if (h2 !== "General") {
-                        cardHtml += `<div class="text-sm"><p class="font-semibold text-gray-700">${h2}</p>`;
-                    } else {
-                        cardHtml += `<div class="text-sm">`;
-                    }
-                    
-                    const items = data[h1][h2];
-                    if (items.length > 0) {
-                        cardHtml += `<ul class="list-disc list-inside text-gray-600 mt-1 pl-2 space-y-1">`;
-                        items.forEach(item => {
-                            if(item.h3) cardHtml += `<li>${item.h3}</li>`;
-                            if(item.h4) {
-                                let noteClass = item.h4.startsWith('📝') 
-                                    ? 'list-none text-xs bg-blue-50 border border-blue-200 text-blue-800 rounded p-2 mt-1' 
-                                    : 'list-none pl-4 text-xs text-gray-500';
-                                cardHtml += `<li class="${noteClass}">${item.h4.replace(/📝\s*/, '')}</li>`;
-                            }
-                        });
-                        cardHtml += `</ul>`;
-                    }
-                    cardHtml += `</div>`;
-                }
+                                <div class="card-content">`;
+                cardHtml += createNestedList(infographicData[h1]);
                 cardHtml += `</div></div>`;
                 grid.innerHTML += cardHtml;
                 colorIndex++;
