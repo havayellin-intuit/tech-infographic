@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,11 +10,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Energetic & Playful -->
-    <!-- Application Structure Plan: The infographic uses a narrative, top-down structure. It opens with high-level statistics to provide an immediate summary of the framework's scale. This is followed by a doughnut chart visualizing the relative complexity of each primary domain. The main content is a responsive grid of cards, where each card represents a primary domain and details its sub-capabilities. This structure was chosen to guide the user from a broad overview to specific details, making a complex hierarchy easy to navigate and understand. -->
+    <!-- Application Structure Plan: The infographic follows a top-down narrative structure. It starts with high-impact summary statistics ("big numbers") to provide an immediate sense of scale. This is followed by a central doughnut chart that visualizes the proportional distribution of sub-capabilities, offering a quick comparison of complexity between the main areas. The main body consists of a responsive grid of cards, each detailing a primary capability. This structure was chosen to guide the user from a broad overview to specific details in a logical, scrollable flow, making the dense hierarchical information easy to digest and explore. -->
     <!-- Visualization & Content Choices: 
-        - Key Metrics (Domains, Functional Areas, etc.): Goal: Inform. Method: Large, bold text in styled cards. Justification: These "big number" stats serve as an effective hook, quickly conveying the scope of the data. NO SVG used.
-        - Capability Distribution: Goal: Compare Composition. Viz: Doughnut Chart (Chart.js/Canvas). Justification: This chart is ideal for showing parts of a whole, clearly illustrating the proportional distribution of functional areas across the main domains. It's a central visual anchor for the page. Label wrapping and custom tooltips are implemented for readability. NO SVG used.
-        - Hierarchical Breakdown: Goal: Organize. Method: Styled HTML cards with nested lists (Tailwind). Justification: For this type of deeply nested textual information, a clean, structured card layout is more readable and scannable than a complex diagram, especially on mobile devices. Unicode characters denote notes. NO SVG/Mermaid used. -->
+        - Key Metrics (Total Categories & Capabilities): Goal: Inform. Method: Large, bold text. Justification: These stats act as a hook, immediately conveying the scope of the framework without complex visuals. NO SVG.
+        - Capability Distribution: Goal: Compare Composition. Viz: Doughnut Chart (Chart.js/Canvas). Justification: Effectively illustrates the parts of a whole, showing which top-level domains are the most built-out. It serves as a visual anchor for the page. The tooltip and label wrapping configurations are included for clarity. NO SVG.
+        - Hierarchical Breakdown: Goal: Organize. Method: Styled HTML cards with nested lists (Tailwind). Justification: For hierarchical, qualitative data, a clean, structured text format is clearer than a complex chart. Cards provide a modular and scannable way to present details for each category. Unicode characters denote notes. NO SVG/Mermaid. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -32,6 +32,11 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-content {
+            flex-grow: 1;
         }
         .card:hover {
             transform: translateY(-5px);
@@ -62,15 +67,15 @@
         <section class="mb-20">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <p class="text-5xl font-bold text-[#7a5195]">9</p>
+                    <p class="text-5xl font-bold text-[#7a5195]">8</p>
                     <p class="text-lg font-medium text-gray-700 mt-2">Primary Domains</p>
                 </div>
                 <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <p class="text-5xl font-bold text-[#ef5675]">23</p>
+                    <p class="text-5xl font-bold text-[#ef5675]">21</p>
                     <p class="text-lg font-medium text-gray-700 mt-2">Functional Areas</p>
                 </div>
                 <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <p class="text-5xl font-bold text-[#ffa600]">40+</p>
+                    <p class="text-5xl font-bold text-[#ffa600]">35+</p>
                     <p class="text-lg font-medium text-gray-700 mt-2">Total Capabilities</p>
                 </div>
             </div>
@@ -93,90 +98,102 @@
     </div>
 
     <script>
-        const data = [
-            { h1: "Core Decisioning and Integrations", h2: "Workflow and Policy Management", h3: "Workflow and Policy Editor", h4: "📝 The UI which is used for workflow definition and policy writing" },
-            { h1: "Core Decisioning and Integrations", h2: "Workflow and Policy Management", h3: "Feature Catalog", h4: "📝 Capability to view and select available data and policy features as a part of policy creation/editing" },
-            { h1: "Core Decisioning and Integrations", h2: "Workflow and Policy Management", h3: "Workflow and Policy Lifecycle Management", h4: "Workflow and Policy Version Control" },
-            { h1: "Core Decisioning and Integrations", h2: "Workflow and Policy Management", h3: null, h4: "Workflow and Policy Release Management" },
-            { h1: "Core Decisioning and Integrations", h2: "Decisioning Runtime", h3: "Workflow Orchestration", h4: "(Maestro and Temporal)" },
-            { h1: "Core Decisioning and Integrations", h2: "Decisioning Runtime", h3: "Workflow Optimization", h4: "(Translation of Logical workflow DAG to optimized Runtime DAG)" },
-            { h1: "Core Decisioning and Integrations", h2: "Decisioning Runtime", h3: "Policy Execution", h4: "(Rule Engine)" },
-            { h1: "Core Decisioning and Integrations", h2: "Decision Acceleration Tools", h3: "RuleX, Policy Drift etc." },
-            { h1: "Core Decisioning and Integrations", h2: "Policy Experimentation", h3: "Offline Policy Experimentation", h4: "📝 Also known as simulation with historic data" },
-            { h1: "Core Decisioning and Integrations", h2: "Policy Experimentation", h3: "Online Policy Experimentation", h4: "📝 Control group framework" },
-            { h1: "Core Decisioning and Integrations", h2: "Vendor Integration Management", h3: "Data enrichment, caching" },
-            { h1: "Device Intelligence", h2: "Device Behavioral Biometrics" },
-            { h1: "Device Intelligence", h2: "Device Fingerprint" },
-            { h1: "Device Intelligence", h2: "Bot Detection" },
-            { h1: "Operation and Investigation Management", h2: "Risk Operational and Investigation Tools", h3: "Content Moderation Operational and Investigation Tools" },
-            { h1: "Operation and Investigation Management", h2: "Customer Due Diligence", h3: "Bank Document Verification & Validation" },
-            { h1: "Operation and Investigation Management", h2: "Customer Due Diligence", h3: "Business License Verification & Validation" },
-            { h1: "Operation and Investigation Management", h2: "Customer Due Diligence", h3: "GovID Verification & Validation" },
-            { h1: "Operation and Investigation Management", h2: "Customer Due Diligence", h3: "Utility Bill Verification & Validation" },
-            { h1: "Document Verification and Validation", h2: "List Management (Neli)" },
-            { h1: "Document Verification and Validation", h2: "Link Analysis (Graph)" },
-            { h1: "Document Verification and Validation", h2: "Trust Level Management", h3: "CSTL" },
-            { h1: "Document Verification and Validation", h2: "Trust Level Management", h3: "HERMES" },
-            { h1: "Trust Intelligence", h2: "Restriction & Immunity Management" },
-            { h1: "Content Intelligence", h2: "User Generated Content Moderation", h3: null, h4: "📝 OICS as a shared capability for all other MOs and business domains/capabilities" },
-            { h1: "Content Intelligence", h2: "Machine Generated Content Moderation" },
-            { h1: "Trust & Safety Data and Analytics", h2: "User Journey Risk Analysis (Chronos)" },
-            { h1: "Trust & Safety Data and Analytics", h2: "Fraud Warehouse (F360)" },
-            { h1: "Continuous Entity Screening", h2: " ", h3: null, h4: "📝 Shared capability to support NECS and decentralized continuous screening" },
-        ];
+       const data = {
+            "Core Decisioning and Integrations": {
+                "Workflow and Policy Management": [
+                    { "h3": "Workflow and Policy Editor", "h4": "📝 The UI which is used for workflow definition and policy writing" },
+                    { "h3": "Feature Catalog", "h4": "📝 Capability to view and select available data and policy features as a part of policy creation/editing" },
+                    { "h3": "Workflow and Policy Lifecycle Management", "h4": "Workflow and Policy Version Control" },
+                    { "h3": null, "h4": "Workflow and Policy Release Management" }
+                ],
+                "Decisioning Runtime": [
+                    { "h3": "Workflow Orchestration", "h4": "(Maestro and Temporal)" },
+                    { "h3": "Workflow Optimization", "h4": "(Translation of Logical workflow DAG to optimized Runtime DAG)" },
+                    { "h3": "Policy Execution", "h4": "(Rule Engine)" }
+                ],
+                "Decision Acceleration Tools": [
+                    { "h3": "RuleX, Policy Drift etc." }
+                ],
+                "Policy Experimentation": [
+                    { "h3": "Offline Policy Experimentation", "h4": "📝 Also known as simulation with historic data" },
+                    { "h3": "Online Policy Experimentation", "h4": "📝 Control group framework" }
+                ],
+                "Vendor Integration Management": [
+                    { "h3": "Data enrichment, caching" }
+                ]
+            },
+            "Device Intelligence": {
+                "Device Behavioral Biometrics": [],
+                "Device Fingerprint": [],
+                "Bot Detection": []
+            },
+            "Operation and Investigation Management": {
+                "Risk Operational and Investigation Tools": [],
+                "Content Moderation Operational and Investigation Tools": [],
+                "Customer Due Diligence": []
+            },
+            "Document Verification and Validation": {
+                "Bank Document Verification & Validation": [],
+                "Business License Verification & Validation": [],
+                "GovID Verification & Validation": [],
+                "Utility Bill Verification & Validation": []
+            },
+            "Trust Intelligence": {
+                "List Management": [ { "h3": "(Neli)" } ],
+                "Link Analysis": [ { "h3": "(Graph)" } ],
+                "Trust Level Management": [
+                    { "h3": "CSTL" },
+                    { "h3": "HERMES" }
+                ],
+                "Restriction & Immunity Management": []
+            },
+            "Content Intelligence": {
+                "User Generated Content Moderation": [
+                    { "h4": "📝 OICS as a shared capability for all other MOs and business domains/capabilities" }
+                ],
+                "Machine Generated Content Moderation": []
+            },
+            "Trust & Safety Data and Analytics": {
+                "User Journey Risk Analysis": [ { "h3": "(Chronos)" } ],
+                "Fraud Warehouse": [ { "h3": "(F360)" } ]
+            },
+            "Continuous Entity Screening": {
+                "General": [
+                    { "h4": "📝 Shared capability to support NECS and decentralized continuous screening" }
+                ]
+            }
+        };
+
 
         document.addEventListener('DOMContentLoaded', () => {
-            const groupedData = data.reduce((acc, item) => {
-                if (!acc[item.h1]) acc[item.h1] = {};
-                
-                let h2 = (item.h2 || "General").trim();
-                if (!acc[item.h1][h2]) acc[item.h1][h2] = [];
-
-                let entry = {};
-                if (item.h3) entry.h3 = item.h3;
-                if (item.h4) entry.h4 = item.h4;
-                if (item.h3 || item.h4) acc[item.h1][h2].push(entry);
-
-                return acc;
-            }, {});
-
             const grid = document.getElementById('capabilities-grid');
-            const chartLabels = Object.keys(groupedData);
-            const chartData = chartLabels.map(h1 => Object.keys(groupedData[h1]).length);
+            const chartLabels = Object.keys(data);
+            const chartData = chartLabels.map(h1 => Object.keys(data[h1]).length);
             const chartColors = ['#003f5c', '#7a5195', '#ef5675', '#ff764a', '#ffa600', '#374c80', '#bc5090', '#009a9c', '#665191'];
             
             let colorIndex = 0;
-            for (const h1 in groupedData) {
-                let cardHtml = `<div class="card flex flex-col p-6">
+            for (const h1 in data) {
+                let cardHtml = `<div class="card p-6">
                                 <h3 class="text-xl font-bold mb-4" style="color: ${chartColors[colorIndex % chartColors.length]};">${h1}</h3>
-                                <div class="space-y-4 flex-grow">`;
+                                <div class="card-content space-y-4">`;
                 
-                for (const h2 in groupedData[h1]) {
+                for (const h2 in data[h1]) {
                      if (h2 !== "General") {
                         cardHtml += `<div class="text-sm"><p class="font-semibold text-gray-700">${h2}</p>`;
                     } else {
                         cardHtml += `<div class="text-sm">`;
                     }
                     
-                    const items = groupedData[h1][h2];
+                    const items = data[h1][h2];
                     if (items.length > 0) {
                         cardHtml += `<ul class="list-disc list-inside text-gray-600 mt-1 pl-2 space-y-1">`;
-                        let currentH3 = null;
                         items.forEach(item => {
-                            if (item.h3 && item.h3 !== currentH3) {
-                                cardHtml += `<li>${item.h3}`;
-                                currentH3 = item.h3;
-                                if(item.h4) { // h4 is nested under h3
-                                     cardHtml += `<ul class="list-none pl-4"><li class="text-xs text-gray-500">${item.h4.replace(/📝\s*/, '')}</li></ul>`;
-                                }
-                                cardHtml += `</li>`;
-                            } else if (item.h4) { // h4 is a direct child
-                                 if (item.h4.startsWith('📝')) {
-                                     cardHtml += `<li class="list-none text-xs bg-blue-50 border border-blue-200 text-blue-800 rounded p-2 mt-1">${item.h4.replace(/📝\s*/, '')}</li>`;
-                                 } else {
-                                      cardHtml += `<li class="list-none pl-4 text-xs text-gray-500">${item.h4}</li>`;
-                                 }
-                                 currentH3 = null;
+                            if(item.h3) cardHtml += `<li>${item.h3}</li>`;
+                            if(item.h4) {
+                                let noteClass = item.h4.startsWith('📝') 
+                                    ? 'list-none text-xs bg-blue-50 border border-blue-200 text-blue-800 rounded p-2 mt-1' 
+                                    : 'list-none pl-4 text-xs text-gray-500';
+                                cardHtml += `<li class="${noteClass}">${item.h4.replace(/📝\s*/, '')}</li>`;
                             }
                         });
                         cardHtml += `</ul>`;
@@ -234,7 +251,7 @@
                             }
                         },
                         tooltip: {
-                             enabled: true,
+                            enabled: true,
                             callbacks: {
                                 title: function(tooltipItems) {
                                     const item = tooltipItems[0];
