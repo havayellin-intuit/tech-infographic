@@ -115,6 +115,14 @@
                 <canvas id="pillarChart"></canvas>
             </div>
         </section>
+        
+        <section class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-2">Capabilities per Primary Domain</h2>
+            <p class="text-center text-gray-600 mb-8">This chart shows the proportional distribution of capabilities across all primary domains.</p>
+            <div class="chart-container">
+                <canvas id="capabilitiesPieChart"></canvas>
+            </div>
+        </section>
 
         <main class="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div id="solutions-column">
@@ -184,6 +192,20 @@
           }
         };
 
+        function countCapabilities(obj) {
+            let count = 0;
+            if (typeof obj !== 'object' || obj === null) {
+                return 1;
+            }
+            if (Object.keys(obj).length === 0) {
+                return 1;
+            }
+            for (const key in obj) {
+                count += countCapabilities(obj[key]);
+            }
+            return count;
+        }
+
         function createNestedList(data) {
             if (typeof data !== 'object' || data === null) return '';
             let html = '<ul class="list-disc list-inside text-gray-600 mt-1 pl-2 space-y-1">';
@@ -210,12 +232,25 @@
             const solutionsCol = document.getElementById('solutions-column');
             const foundationsCol = document.getElementById('foundations-column');
             const pillarColors = { "Solutions": "#003f5c", "Foundations": "#7a5195" };
+            const pieChartColors = ['#003f5c', '#7a5195', '#ef5675', '#ff764a', '#ffa600', '#374c80', '#bc5090', '#009a9c', '#665191', '#4099ff', '#ffc107', '#00bcd4'];
+
+            const allPrimaryDomains = {};
+            for (const pillar in frameworkData) {
+                const domains = frameworkData[pillar];
+                for (const domain in domains) {
+                    allPrimaryDomains[domain] = domains[domain];
+                }
+            }
+
+            const pieLabels = Object.keys(allPrimaryDomains);
+            const pieData = pieLabels.map(domain => countCapabilities(allPrimaryDomains[domain]));
 
             for (const pillar in frameworkData) {
                 const targetCol = pillar === 'Solutions' ? solutionsCol : foundationsCol;
                 const domains = frameworkData[pillar];
                 for (const domain in domains) {
                     let cardHtml = `<div class="card p-6 mb-8">
+                                    <div class="tag tag-${pillar.toLowerCase()}">${pillar}</div>
                                     <h3 class="text-xl font-bold mb-4" style="color: ${pillarColors[pillar]};">${domain}</h3>
                                     <div class="card-content">`;
                     cardHtml += createNestedList(domains[domain]);
@@ -224,14 +259,36 @@
                 }
             }
             
-            const ctx = document.getElementById('pillarChart').getContext('2d');
-            const pillarChart = new Chart(ctx, {
+            const processLabel = (label) => {
+                if (label.length > 16) {
+                    const words = label.split(' ');
+                    let lines = [];
+                    let currentLine = '';
+                    for (const word of words) {
+                        if ((currentLine + ' ' + word).trim().length > 16 && currentLine.length > 0) {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        } else {
+                            currentLine = currentLine ? currentLine + ' ' + word : word;
+                        }
+                    }
+                    lines.push(currentLine);
+                    return lines;
+                }
+                return label;
+            };
+
+            const processedPillarLabels = Object.keys(frameworkData).map(processLabel);
+            const pillarData = Object.values(frameworkData).map(p => Object.keys(p).length);
+
+            const ctxPillar = document.getElementById('pillarChart').getContext('2d');
+            new Chart(ctxPillar, {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(frameworkData),
+                    labels: processedPillarLabels,
                     datasets: [{
                         label: 'Number of Primary Domains',
-                        data: Object.values(frameworkData).map(p => Object.keys(p).length),
+                        data: pillarData,
                         backgroundColor: [pillarColors["Solutions"], pillarColors["Foundations"]],
                         borderColor: [pillarColors["Solutions"], pillarColors["Foundations"]],
                         borderWidth: 1,
@@ -246,13 +303,56 @@
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
-                                title: (tooltipItems) => tooltipItems[0].label
+                                title: (tooltipItems) => {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) return label.join(' ');
+                                    return label;
+                                }
                             }
                         }
                     },
                     scales: {
                         x: { beginAtZero: true, grid: { display: false } },
                         y: { grid: { display: false }, ticks: { font: { size: 14, weight: 'bold' } } }
+                    }
+                }
+            });
+
+            const processedPieLabels = pieLabels.map(processLabel);
+            const ctxPie = document.getElementById('capabilitiesPieChart').getContext('2d');
+            new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: processedPieLabels,
+                    datasets: [{
+                        label: 'Total Capabilities',
+                        data: pieData,
+                        backgroundColor: pieChartColors,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 12, family: "'Inter', sans-serif" },
+                                boxWidth: 15, padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: (tooltipItems) => {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) return label.join(' ');
+                                    return label;
+                                }
+                            }
+                        }
                     }
                 }
             });
